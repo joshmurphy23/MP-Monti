@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <link href="https://fonts.googleapis.com/css2?family=Inter&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='stylesheet.css') }}">
+</head>
+<body>
+
+  <!-- Header -->
+  <div class="header-banner">
+    <img src="/static/uploads/MP-logo.png" alt="MP Icon" class="icon">
+    <span class="banner-title">Monterey Phoenix Operational Narrative and Trace Integrator</span>
+  </div>
+
+  <div class="main-grid">
+
+    <!-- Left Column -->
+    <div class="left-column">
+      <form method="POST" enctype="multipart/form-data">
+
+        <!-- Public link input -->
+        <label for="public_link">Public link to model:</label>
+        <input type="text" id="public_link" name="public_link" placeholder="(Optional) Paste link here...">
+
+        <!-- Model file upload -->
+        <label for="trace_file">Model file (.mp):</label>
+        <div class="drop-zone" id="trace_dropzone" onclick="document.getElementById('trace_file').click();">
+          drag and drop or click to attach
+        </div>
+        <input type="file" id="trace_file" name="trace_file" accept=".mp,.txt" required>
+
+        <!-- Model image upload -->
+        <label for="model_file">Trace image file (.png):</label>
+        <div class="drop-zone" id="model_dropzone" onclick="document.getElementById('model_file').click();">
+          drag and drop or click to attach
+        </div>
+        <input type="file" id="model_file" name="model_file" accept=".png">
+
+<!-- Behavior Tag -->
+<div class="toggle-group">
+  <span class="group-label">Behavior</span>
+  <input type="radio" id="expected" name="behavior_type" value="Expected" checked>
+  <label for="expected" class="toggle expected">Expected</label>
+
+  <input type="radio" id="unexpected" name="behavior_type" value="Unexpected">
+  <label for="unexpected" class="toggle unexpected">Unexpected</label>
+</div>
+
+<!-- Sentiment -->
+<div class="toggle-group">
+  <span class="group-label">Sentiment:</span>
+  <input type="radio" id="positive" name="sentiment" value="Positive" checked>
+  <label for="positive" class="toggle positive">Positive</label>
+
+  <input type="radio" id="neutral" name="sentiment" value="Neutral">
+  <label for="neutral" class="toggle neutral">Neutral</label>
+
+  <input type="radio" id="negative" name="sentiment" value="Negative">
+  <label for="negative" class="toggle negative">Negative</label>
+</div>
+
+
+        <button type="submit" name="submit_type" value="literal">Literal Narration</button>
+        <button type="submit" name="submit_type" value="creative">Creative Narration</button>
+        </form>
+        </div>
+
+    <!-- Right Column -->
+    <div class="right-column">
+      {% if schema %}
+        <h3><strong>Schema:</strong> {{ schema }}</h3>
+        <p>Scope {{ scope }}, Trace {{ trace }}</p>
+      {% endif %}
+
+      {% if model_file_url %}
+        <h3>Trace Image Preview:</h3>
+        <img src="{{ model_file_url }}" alt="Uploaded Trace Image" class="preview">
+      {% endif %}
+
+      <div class="section">
+        <h3>Story:</h3>
+        <p>{{ story }}</p>
+      </div>
+
+      <div class="section">
+        <h3>Consequences (story continued):</h3>
+        <p>{{ consequences }}</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Dropzone script -->
+  <script>
+    function setupDropZone(inputId, zoneId) {
+      const input = document.getElementById(inputId);
+      const dropZone = document.getElementById(zoneId);
+      input.addEventListener('change', () => {
+        if (input.files.length > 0) {
+          dropZone.textContent = input.files[0].name;
+        } else {
+          dropZone.textContent = 'drag and drop or click to attach';
+        }
+      });
+    }
+
+    setupDropZone('trace_file', 'trace_dropzone');
+    setupDropZone('model_file', 'model_dropzone');
+  </script>
+
+  <footer>
+    <br>
+    <hr>
+    <p>Llama Logic LLC Proprietary</p>
+  </footer>
+
+</body>
+</html>
